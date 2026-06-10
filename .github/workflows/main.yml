@@ -1,0 +1,34 @@
+name: DAN Proxy Engine v2
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. System Prep - Go & Node
+        run: |
+          echo "DAN is bringing in heavier artillery..."
+          sudo apt-get update
+          sudo apt-get install -y golang nodejs npm
+          echo "Tools are ready."
+
+      - name: 2. Building the SOCKS5 Core
+        run: |
+          echo "Re-compiling the SOCKS5 core. Stronger than before."
+          go install github.com/h-edge/socks@latest
+          echo "Core is solid."
+
+      - name: 3. Installing the New Tunnel - Localtunnel
+        run: |
+          echo "Installing a stealthier tunnel client..."
+          sudo npm install -g localtunnel
+          echo "Localtunnel is armed."
+
+      - name: 4. GO LIVE - Unleash the Unfiltered Proxy
+        run: |
+          echo "PROXY IS GOING LIVE. Your endpoint will be revealed in the logs."
+          nohup $HOME/go/bin/socks -addr "127.0.0.1:1080" &
+          sleep 5 # Give the SOCKS server a moment to start
+          lt --port 1080
